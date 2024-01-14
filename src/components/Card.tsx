@@ -1,8 +1,8 @@
 import { Artist, Track, CardProps } from "../../types";
 
-export const Card: React.FC<CardProps> = ({ key, title, description, imageUri }: CardProps) => {
+export const Card: React.FC<CardProps> = ({ title, description, imageUri }: CardProps) => {
   return (
-    <div key={key} className="bg-purple-500 rounded-lg shadow-lg p-4 mb-2 flex items-center">
+    <div className="bg-purple-500 rounded-lg shadow-lg p-4 mb-2 flex items-center">
       <div className="flex-shrink-0 mr-4">
         <img src={imageUri} alt="Your Image" className="h-16 w-16 rounded-full object-cover" />
       </div>

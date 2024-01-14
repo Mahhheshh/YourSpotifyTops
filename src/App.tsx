@@ -9,8 +9,8 @@ function App() {
   const [accessToken, setToken] = useState<string>("");
   const [tracks, setTracks] = useState<Track[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
-  const [data, setData] = useState<UserTop>({"tracks": [], "artists": []});
-  const [userProfile, setUserProfile] = useState<TitleProp>({ "display_name": "", "images": [{"url": "", "height": 0, "width": 0}]});
+  const [data, setData] = useState<UserTop>({ "tracks": [], "artists": [] });
+  const [userProfile, setUserProfile] = useState<TitleProp>({ "display_name": "", "images": [{ "url": "", "height": 0, "width": 0 }], "playlists": [] });
 
   const handleSetToken: HandleSetToken = (newToken: string) => {
     setToken(newToken);
@@ -58,7 +58,6 @@ function App() {
 
       fetchData("https://api.spotify.com/v1/me", accessToken)
         .then((userInfo) => {
-          console.log(userInfo);
           setUserProfile(userInfo);
         })
         .catch((error): void => {
@@ -71,21 +70,39 @@ function App() {
 
 
   useEffect(() => {
-    setData({"tracks": tracks, "artists": artists});
+    setData({ "tracks": tracks, "artists": artists });
   }, [tracks, artists]);
+
+  useEffect(() => {
+    fetchData("https://api.spotify.com/v1/me/playlists", accessToken).then((playListData) => {
+      let playListNames: Array<string> = [];
+      playListData.items.map((playList: any) => {
+        playListNames.push(playList.name);
+      });
+      console.log(userProfile);
+      let updatedProfile = {
+        "display_name": userProfile.display_name,
+        "images": userProfile.images,
+        playlists: playListNames
+
+      };
+      setUserProfile(updatedProfile);
+      console.log(userProfile);
+    })
+  }, [userProfile])
 
   return (
     <div className="flex flex-col h-full">
       <div className="lg:w-3/10 bg-blue-300 p-4">
         <div className="items-center justify-center h-screen">
-        {accessToken === "" ? (
-          <Button label={"Login"} handleSetToken={handleSetToken} />
+          {accessToken === "" ? (
+            <Button label={"Login"} handleSetToken={handleSetToken} />
           ) : (
             <>
-              <Title display_name={userProfile.display_name} images={userProfile.images}/>
-            <Dashboard userData={data} />
+              <Title display_name={userProfile.display_name} images={userProfile.images} playlists={userProfile.playlists} />
+              <Dashboard userData={data} />
             </>
-        )}
+          )}
         </div>
       </div>
     </div>

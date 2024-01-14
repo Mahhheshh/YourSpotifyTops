@@ -34,7 +34,7 @@ interface ButtonProps {
 interface CardProps {
     key?: number;
     title: string;
-    description: string;
+    description?: string;
     imageUri: string;
 }
 

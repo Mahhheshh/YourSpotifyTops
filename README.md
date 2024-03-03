@@ -11,7 +11,7 @@ git clone https://github.com/Mahhheshh/YourSpotiftTops.git
 cd YourSpotiftTops
 ```
 3. Run `npm install`
-4. Run `npm start dev`
+4. Run `npm run dev`
 5. Go to `https://localhost:5173`
 
 

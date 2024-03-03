@@ -92,20 +92,18 @@ function App() {
   }, [userProfile])
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="lg:w-3/10 bg-blue-300 p-4">
-        <div className="items-center justify-center h-screen">
-          {accessToken === "" ? (
-            <Button label={"Login"} handleSetToken={handleSetToken} />
-          ) : (
-            <>
-              <Title display_name={userProfile.display_name} images={userProfile.images} playlists={userProfile.playlists} />
-              <Dashboard userData={data} />
-            </>
-          )}
+    <>
+    {
+      accessToken === "" ? (
+        <Button label={"View Your Top's"} handleSetToken={handleSetToken} />
+      ) : (
+        <div className="bg-[#38423B] h-screen">
+          <Title display_name={userProfile.display_name} images={userProfile.images} playlists={userProfile.playlists} />
+          <Dashboard userData={data} />
         </div>
-      </div>
-    </div>
+      )
+    }
+    </>
   )
 }
 

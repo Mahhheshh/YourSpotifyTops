@@ -17,7 +17,10 @@ export interface Artist {
     images: Image[];
 }
 
-export interface UserTop {
+export interface UserStateData {
+    display_name: string;
+    imageUrl: string;
+    playlistNames: string[];
     tracks: Track[];
     artists: Artist[];
 }
@@ -44,6 +47,6 @@ export interface DashboardProps {
 
 export interface TitleProp {
     display_name: string;
-    images: Image[];
+    imageUrl: string;
     playlists?: string[];
 }

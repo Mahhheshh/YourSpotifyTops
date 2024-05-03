@@ -8,7 +8,7 @@ const Title: React.FC<TitleProp> = ({
   playlists,
 }: TitleProp) => {
   return (
-    <div className="text-centered">
+    <div className="text-centered p-4">
       <Card
         title={display_name}
         description={playlists?.join(", ")}

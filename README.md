@@ -16,4 +16,5 @@ cd YourSpotiftTops
 
 
 ### preview
+![HomePage](preview/homepage.png)
 ![DashBoard](preview/dashboard.png)

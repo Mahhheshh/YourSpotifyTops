@@ -85,7 +85,7 @@ function App() {
     },
     enabled: accessToken !== "",
   });
-
+  console.log(userProfileQuery.data)
   useEffect(() => {
     if (
       !userProfileQuery.data ||
@@ -96,7 +96,7 @@ function App() {
       return;
     setData({
       display_name: userProfileQuery.data?.display_name,
-      imageUrl: userProfileQuery.data?.images[0].url,
+      imageUrl: userProfileQuery.data?.images.length ? userProfileQuery.data?.images[0].url : "/profile.svg",
       playlistNames: playlistQuery.data,
       tracks: tracksQuery.data?.items,
       artists: artistsQuery.data?.items,

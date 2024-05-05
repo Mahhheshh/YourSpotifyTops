@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
-import { HandleSetToken, UserStateData } from "../types";
+import { UserStateData } from "../types";
 import { useQuery } from "@tanstack/react-query";
 
-import Button from "./components/Button";
 import Dashboard from "./components/Dashboard";
 import Title from "./components/Title";
+import HomePage from "./components/HomePage";
+
+interface HandleSetToken {
+  (newToken: string): void;
+}
 
 function App() {
   const [accessToken, setToken] = useState<string>("");
@@ -105,11 +109,11 @@ function App() {
   ]);
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-green-500 to-purple-600">
       {accessToken === "" ? (
-        <Button label={"View Your Top's"} handleSetToken={handleSetToken} />
+        <HomePage handleSetToken={handleSetToken} />
       ) : (
-        <div className="bg-[#38423B] h-screen">
+        <div className="container mx-auto md:max-w-6xl">
           <Title
             display_name={data.display_name}
             imageUrl={data.imageUrl}
@@ -118,7 +122,7 @@ function App() {
           <Dashboard userData={data} />
         </div>
       )}
-    </>
+    </div>
   );
 }
 

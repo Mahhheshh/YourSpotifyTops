@@ -26,12 +26,12 @@ export interface UserStateData {
 }
 
 export interface HandleSetToken {
-    (newToken: string): void;
+    handleSetToken: (newToken: string) => void;
 }
 
 interface ButtonProps {
     label: string;
-    handleSetToken: (value: string) => void;
+    handleSetToken: HandleSetToken.handleSetToken;
 }
 
 interface CardProps {

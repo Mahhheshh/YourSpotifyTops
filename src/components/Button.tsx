@@ -23,11 +23,12 @@ const Button: React.FC<ButtonProps> = ({
   });
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-lg" onClick={() => window.location.href = authUri}>
-        {label}
-      </button>
-    </div>
+    <button
+      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out"
+      onClick={() => (window.location.href = authUri)}
+    >
+      {label}
+    </button>
   );
 };
 

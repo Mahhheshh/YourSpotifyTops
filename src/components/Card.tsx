@@ -16,7 +16,7 @@ export const Card: React.FC<CardProps> = ({
       </div>
       <div className="overflow-hidden text-left text-white ">
         <h2 className="text-xl font-semibold mb-2 whitespace-nowrap overflow-hidden">
-          {title}
+        {title}
         </h2>
         <p className="text-sm whitespace-nowrap">{description}</p>
       </div>

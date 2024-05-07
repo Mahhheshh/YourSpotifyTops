@@ -23,7 +23,6 @@ export interface HandleSetToken {
 
 interface ButtonProps {
     label: string;
-    handleSetToken: HandleSetToken.handleSetToken;
 }
 
 interface CardProps {
@@ -31,10 +30,6 @@ interface CardProps {
     title: string;
     description?: string;
     imageUri: string;
-}
-
-export interface DashboardProps {
-    stateData: StateData;
 }
 
 export interface TitleProp {

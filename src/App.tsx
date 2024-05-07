@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { UserStateData } from "../types";
+import { useEffect, useReducer } from "react";
+import { StateDataAction, StateData } from "../types";
 import { useQuery } from "@tanstack/react-query";
 
 import Dashboard from "./components/Dashboard";
@@ -10,44 +10,80 @@ interface HandleSetToken {
   (newToken: string): void;
 }
 
-function App() {
-  const [accessToken, setToken] = useState<string>("");
-  const [data, setData] = useState<UserStateData>({
-    display_name: "",
-    imageUrl: "",
-    playlistNames: [],
-    tracks: [],
-    artists: [],
-  });
+function stateDataReducer(
+  state: StateData,
+  action: StateDataAction
+): StateData {
+  console.log(action);
+  switch (action.type) {
+    case "SET_TOKEN":
+      return {
+        ...state,
+        accessToken: action.payload.accessToken,
+      };
+    case "SET_USER_DATA":
+      return {
+        ...state,
+        display_name: action.payload.display_name,
+        imageUrl: action.payload.imageUrl,
+        playlistNames: action.payload.playlistNames,
+        tracks: action.payload.tracks,
+        artists: action.payload.artists,
+      };
+    default:
+      return state;
+  }
+}
 
-  const handleSetToken: HandleSetToken = (newToken: string) => {
-    setToken(newToken);
-  };
+const initialState = {
+  accessToken: "",
+  display_name: "",
+  imageUrl: "",
+  playlistNames: [],
+  tracks: [],
+  artists: [],
+};
 
-  const fetchData = (url: string, token: string) => {
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+const fetchData = (url: string, token: string) => {
+  return fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok.");
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        }
-        return response.json();
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        throw error;
-      });
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      throw error;
+    });
+};
+
+function App() {
+  const [state, dispatchData] = useReducer(stateDataReducer, initialState);
+
+  const handleSetToken: HandleSetToken = (newToken) => {
+    dispatchData({
+      type: "SET_TOKEN",
+      payload: {
+        ...state,
+        accessToken: newToken,
+      },
+    });
   };
 
   const tracksQuery = useQuery({
     queryKey: ["tracks"],
     queryFn: () => {
-      return fetchData("https://api.spotify.com/v1/me/top/tracks", accessToken);
+      return fetchData(
+        "https://api.spotify.com/v1/me/top/tracks",
+        state.accessToken
+      );
     },
-    enabled: accessToken !== "",
+    enabled: state.accessToken !== "",
   });
 
   const artistsQuery = useQuery({
@@ -55,18 +91,18 @@ function App() {
     queryFn: () => {
       return fetchData(
         "https://api.spotify.com/v1/me/top/artists",
-        accessToken
+        state.accessToken
       );
     },
-    enabled: accessToken !== "",
+    enabled: state.accessToken !== "",
   });
 
   const userProfileQuery = useQuery({
     queryKey: ["userProfile"],
     queryFn: () => {
-      return fetchData("https://api.spotify.com/v1/me", accessToken);
+      return fetchData("https://api.spotify.com/v1/me", state.accessToken);
     },
-    enabled: accessToken !== "",
+    enabled: state.accessToken !== "",
   });
 
   const playlistQuery = useQuery({
@@ -74,7 +110,7 @@ function App() {
     queryFn: () => {
       return fetchData(
         "https://api.spotify.com/v1/me/playlists",
-        accessToken
+        state.accessToken
       ).then((data) => {
         let playListNames: Array<string> = [];
         data.items.forEach((playlist: any) => {
@@ -83,9 +119,8 @@ function App() {
         return playListNames;
       });
     },
-    enabled: accessToken !== "",
+    enabled: state.accessToken !== "",
   });
-  console.log(userProfileQuery.data)
   useEffect(() => {
     if (
       !userProfileQuery.data ||
@@ -94,13 +129,18 @@ function App() {
       !playlistQuery.data
     )
       return;
-    setData({
-      display_name: userProfileQuery.data?.display_name,
-      imageUrl: userProfileQuery.data?.images.length ? userProfileQuery.data?.images[0].url : "/profile.svg",
-      playlistNames: playlistQuery.data,
-      tracks: tracksQuery.data?.items,
-      artists: artistsQuery.data?.items,
-    });
+    dispatchData({
+      type: "SET_USER_DATA",
+      payload: {
+        accessToken: state.accessToken,
+        display_name: userProfileQuery.data.display_name,
+        imageUrl: userProfileQuery.data.images ? userProfileQuery.data.images[0].url : "/profile.svg",
+        playlistNames: playlistQuery.data,
+        tracks: tracksQuery.data.items,
+        artists: artistsQuery.data.items,
+      }
+    }
+    )
   }, [
     userProfileQuery.data,
     tracksQuery.data,
@@ -110,16 +150,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-500 to-purple-600">
-      {accessToken === "" ? (
+      {state.accessToken === "" ? (
         <HomePage handleSetToken={handleSetToken} />
       ) : (
         <div className="container mx-auto md:max-w-6xl">
           <Title
-            display_name={data.display_name}
-            imageUrl={data.imageUrl}
-            playlists={data.playlistNames}
+            display_name={state.display_name}
+            imageUrl={state.imageUrl}
+            playlists={state.playlistNames}
           />
-          <Dashboard userData={data} />
+          <Dashboard userData={state} />
         </div>
       )}
     </div>

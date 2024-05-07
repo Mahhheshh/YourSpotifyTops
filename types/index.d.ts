@@ -17,14 +17,6 @@ export interface Artist {
     images: Image[];
 }
 
-export interface UserStateData {
-    display_name: string;
-    imageUrl: string;
-    playlistNames: string[];
-    tracks: Track[];
-    artists: Artist[];
-}
-
 export interface HandleSetToken {
     handleSetToken: (newToken: string) => void;
 }
@@ -49,4 +41,17 @@ export interface TitleProp {
     display_name: string;
     imageUrl: string;
     playlists?: string[];
+}
+export interface StateDataAction {
+    type: "SET_TOKEN" | "SET_USER_DATA";
+    payload: StateData;
+} 
+
+export interface StateData {
+    accessToken: string;
+    display_name: string;
+    imageUrl: string;
+    playlistNames: string[];
+    tracks: Track[];
+    artists: Artist[];
 }

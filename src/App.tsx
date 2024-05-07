@@ -3,7 +3,6 @@ import { StateDataAction, StateData } from "../types";
 import { useQuery } from "@tanstack/react-query";
 
 import Dashboard from "./components/Dashboard";
-import Title from "./components/Title";
 import HomePage from "./components/HomePage";
 
 interface HandleSetToken {
@@ -153,14 +152,7 @@ function App() {
       {state.accessToken === "" ? (
         <HomePage handleSetToken={handleSetToken} />
       ) : (
-        <div className="container mx-auto md:max-w-6xl">
-          <Title
-            display_name={state.display_name}
-            imageUrl={state.imageUrl}
-            playlists={state.playlistNames}
-          />
-          <Dashboard userData={state} />
-        </div>
+          <Dashboard stateData={state} />
       )}
     </div>
   );

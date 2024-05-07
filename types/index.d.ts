@@ -34,7 +34,7 @@ interface CardProps {
 }
 
 export interface DashboardProps {
-    userData: UserTop;
+    stateData: StateData;
 }
 
 export interface TitleProp {

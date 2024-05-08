@@ -4,10 +4,9 @@ import { StateDataAction, StateData } from "../types";
 import Dashboard from "./components/Dashboard";
 import HomePage from "./components/HomePage";
 
-
 function stateDataReducer(
   state: StateData,
-  action: StateDataAction
+  action: StateDataAction,
 ): StateData {
   console.log(action);
   switch (action.type) {
@@ -39,21 +38,19 @@ const initialState = {
   artists: [],
 };
 
-export const UserDataContext = createContext<{state: StateData; dispatchData: Dispatch<StateDataAction>}>({state: initialState, dispatchData: () => {}});
+export const UserDataContext = createContext<{
+  state: StateData;
+  dispatchData: Dispatch<StateDataAction>;
+}>({ state: initialState, dispatchData: () => {} });
 
 function App() {
   const [state, dispatchData] = useReducer(stateDataReducer, initialState);
 
-
   return (
-    <UserDataContext.Provider value={{state, dispatchData}}>
-    <div className="min-h-screen bg-gradient-to-br from-green-500 to-purple-600">
-      {state.accessToken === "" ? (
-        <HomePage />
-      ) : (
-          <Dashboard />
-      )}
-    </div>
+    <UserDataContext.Provider value={{ state, dispatchData }}>
+      <div className="min-h-screen bg-gradient-to-br from-green-500 to-purple-600">
+        {state.accessToken === "" ? <HomePage /> : <Dashboard />}
+      </div>
     </UserDataContext.Provider>
   );
 }

@@ -1,52 +1,52 @@
 export interface Image {
-    url: string;
-    height: number;
-    width: number;
+  url: string;
+  height: number;
+  width: number;
 }
 
 export interface Track {
-    id: string;
-    name: string;
-    image: string;
-    album: { name: string, [key: string]: Image[] };
+  id: string;
+  name: string;
+  image: string;
+  album: { name: string; [key: string]: Image[] };
 }
 
 export interface Artist {
-    id: string;
-    name: string;
-    images: Image[];
+  id: string;
+  name: string;
+  images: Image[];
 }
 
 export interface HandleSetToken {
-    handleSetToken: (newToken: string) => void;
+  handleSetToken: (newToken: string) => void;
 }
 
 interface ButtonProps {
-    label: string;
+  label: string;
 }
 
 interface CardProps {
-    key?: number;
-    title: string;
-    description?: string;
-    imageUri: string;
+  key?: number;
+  title: string;
+  description?: string;
+  imageUri: string;
 }
 
 export interface TitleProp {
-    display_name: string;
-    imageUrl: string;
-    playlists?: string[];
+  display_name: string;
+  imageUrl: string;
+  playlists?: string[];
 }
 export interface StateDataAction {
-    type: "SET_TOKEN" | "SET_USER_DATA";
-    payload: StateData;
-} 
+  type: "SET_TOKEN" | "SET_USER_DATA";
+  payload: StateData;
+}
 
 export interface StateData {
-    accessToken: string;
-    display_name: string;
-    imageUrl: string;
-    playlistNames: string[];
-    tracks: Track[];
-    artists: Artist[];
+  accessToken: string;
+  display_name: string;
+  imageUrl: string;
+  playlistNames: string[];
+  tracks: Track[];
+  artists: Artist[];
 }

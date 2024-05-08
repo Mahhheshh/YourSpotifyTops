@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
     queryFn: () => {
       return fetchData(
         "https://api.spotify.com/v1/me/top/tracks",
-        state.accessToken
+        state.accessToken,
       );
     },
     enabled: state.accessToken !== "",
@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
     queryFn: () => {
       return fetchData(
         "https://api.spotify.com/v1/me/top/artists",
-        state.accessToken
+        state.accessToken,
       );
     },
     enabled: state.accessToken !== "",
@@ -60,10 +60,10 @@ const Dashboard: React.FC = () => {
     queryFn: () => {
       return fetchData(
         "https://api.spotify.com/v1/me/playlists",
-        state.accessToken
+        state.accessToken,
       ).then((data) => {
-        let playListNames: Array<string> = [];
-        data.items.forEach((playlist: any) => {
+        const playListNames: Array<string> = [];
+        data.items.forEach((playlist: { name: string }) => {
           playListNames.push(playlist.name);
         });
         return playListNames;

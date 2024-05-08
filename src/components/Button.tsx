@@ -3,10 +3,8 @@ import { useEffect, useContext } from "react";
 import { ButtonProps } from "../../types";
 import { UserDataContext } from "../App";
 
-const Button: React.FC<ButtonProps> = ({
-  label,
-}: ButtonProps) => {
-  const {state, dispatchData } = useContext(UserDataContext);
+const Button: React.FC<ButtonProps> = ({ label }: ButtonProps) => {
+  const { state, dispatchData } = useContext(UserDataContext);
   const clientId: string = "c17ce726db8b41e3ba0fa6b1a8b087c1";
   const redirectUri: string = `${window.location.origin}/callback`;
   const scopes: string = "user-top-read,user-read-private,user-read-email";

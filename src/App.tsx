@@ -1,4 +1,4 @@
-import { useReducer, createContext, Dispatch } from "react";
+import { useReducer, createContext, Dispatch, useEffect } from "react";
 import { StateDataAction, StateData } from "../types";
 
 import Dashboard from "./components/Dashboard";
@@ -46,10 +46,25 @@ export const UserDataContext = createContext<{
 function App() {
   const [state, dispatchData] = useReducer(stateDataReducer, initialState);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = params.get("access_token");
+    console.log(params);
+    if (accessToken) {
+      dispatchData({
+        type: "SET_TOKEN",
+        payload: {
+          ...state,
+          accessToken: accessToken,
+        },
+      });
+    }
+  }, [window.location.hash]);
+
   return (
     <UserDataContext.Provider value={{ state, dispatchData }}>
       <div className="min-h-screen bg-gradient-to-br from-green-500 to-purple-600">
-        {state.accessToken === "" ? <HomePage /> : <Dashboard />}
+        {!state.accessToken ? <HomePage /> : <Dashboard />}
       </div>
     </UserDataContext.Provider>
   );

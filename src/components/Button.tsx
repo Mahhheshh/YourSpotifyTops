@@ -1,7 +1,7 @@
 import { ButtonProps } from "../../types";
 
 const Button: React.FC<ButtonProps> = ({ label }: ButtonProps) => {
-  const clientId: string = "c17ce726db8b41e3ba0fa6b1a8b087c1";
+  const clientId: string = import.meta.env.VITE_CLIENT_ID;
   const redirectUri: string = `${window.location.origin}/callback`;
   const scopes: string = "user-top-read,user-read-private,user-read-email";
   const authUri: string = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&show_dialog=true&scope=${scopes}`;

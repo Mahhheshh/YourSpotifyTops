@@ -7,14 +7,15 @@ export interface Image {
 export interface Track {
   id: string;
   name: string;
-  image: string;
-  album: { name: string; [key: string]: Image[] };
+  imageUrl: string;
+  description: string;
 }
 
 export interface Artist {
   id: string;
   name: string;
-  images: Image[];
+  imageUrl: string;
+  description?: string;
 }
 
 export interface HandleSetToken {
@@ -26,7 +27,7 @@ interface ButtonProps {
 }
 
 interface CardProps {
-  key?: number;
+  key?: string;
   title: string;
   description?: string;
   imageUri: string;

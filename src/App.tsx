@@ -8,7 +8,6 @@ function stateDataReducer(
   state: StateData,
   action: StateDataAction,
 ): StateData {
-  console.log(action);
   switch (action.type) {
     case "SET_TOKEN":
       return {
@@ -29,6 +28,17 @@ function stateDataReducer(
   }
 }
 
+export const isEmpty = (stateData: StateData): boolean => {
+  return (
+    !stateData.accessToken ||
+    !stateData.display_name ||
+    !stateData.imageUrl ||
+    !stateData.playlistNames.length ||
+    !stateData.tracks.length ||
+    !stateData.artists.length
+  );
+};
+
 const initialState = {
   accessToken: "",
   display_name: "",
@@ -43,22 +53,48 @@ export const UserDataContext = createContext<{
   dispatchData: Dispatch<StateDataAction>;
 }>({ state: initialState, dispatchData: () => {} });
 
+function init() {
+  const storedState = localStorage.getItem("stateData");
+  if (!storedState) {
+    return initialState;
+  }
+  const parsedState = JSON.parse(storedState);
+  if (isEmpty(parsedState)) {
+    return initialState;
+  }
+  return JSON.parse(storedState);
+}
+
 function App() {
-  const [state, dispatchData] = useReducer(stateDataReducer, initialState);
+  const [state, dispatchData] = useReducer(stateDataReducer, null, init);
+  useEffect(() => {
+    if (isEmpty(state)) {
+      return;
+    }
+
+    const parsedStoredState = JSON.parse(localStorage.getItem("stateData") as string || "{}");
+    localStorage.setItem("stateData", JSON.stringify({
+      ...parsedStoredState,
+      accessToken: state.accessToken,
+    }));
+    
+  }, [state.accessToken]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = params.get("access_token");
-    console.log(params);
-    if (accessToken) {
-      dispatchData({
-        type: "SET_TOKEN",
-        payload: {
-          ...state,
-          accessToken: accessToken,
-        },
-      });
+    if (!accessToken) {
+      return;
     }
+    dispatchData({
+      type: "SET_TOKEN",
+      payload: {
+        ...state,
+        accessToken: accessToken,
+      },
+    });
+
+    window.history.pushState({}, "", "/");
   }, [window.location.hash]);
 
   return (

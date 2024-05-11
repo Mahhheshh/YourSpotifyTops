@@ -27,14 +27,12 @@ export const Card: React.FC<CardProps> = ({
 export const CardList = ({ items }: { items: (Track | Artist)[] }) => {
   return (
     <div>
-      {items.map((item, key) => (
+      {items.map((item) => (
         <Card
-          key={key}
+          key={item.id}
           title={item.name}
-          description={"album" in item ? item.album.name : ""}
-          imageUri={
-            "album" in item ? item.album.images[0].url : item.images[0].url
-          }
+          description={item.description || ""}
+          imageUri={item.imageUrl}
         />
       ))}
     </div>
